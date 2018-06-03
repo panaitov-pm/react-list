@@ -1,0 +1,3 @@
+div[class*="MuiInput-underline"]:before {
+	top :100%;
+}

@@ -25,7 +25,8 @@
     "redux-devtools-log-monitor": "^1.4.0",
     "redux-slider-monitor": "^2.0.0-1",
     "redux-thunk": "^2.3.0",
-    "shortid": "^2.2.8"
+    "shortid": "^2.2.8",
+    "react-spinkit": "latest"
   },
   "scripts": {
     "start": "react-scripts start",

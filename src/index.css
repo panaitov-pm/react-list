@@ -7,6 +7,7 @@ body {
 	box-sizing :border-box;
 }
 .container {
+	position :relative;
 	width         :100%;
 	max-width     :1200px;
 	padding-left  :16px;
@@ -14,9 +15,32 @@ body {
 	margin-left   :auto;
 	margin-right  :auto;
 }
+.loader {
+	position :absolute;
+	z-index :-1;
+	display :flex;
+	align-items :center;
+	justify-content :center;
+	top :0;
+	bottom :0;
+	left :0;
+	right :0;
+	background: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%,rgba(255,255,255,1) 41%);
+}
+.loader.is-active {
+	z-index :1;
+}
+.sk-folding-cube {
+	width: 27px;
+	height: 27px;
+}
 @media (min-width :600px) {
 	.container {
 		padding-left  :24px;
 		padding-right :24px;
+	}
+	.sk-folding-cube {
+		width: 54px;
+		height: 54px;
 	}
 }

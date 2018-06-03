@@ -18,17 +18,17 @@ const Navigation = ({ classes }) => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar className="container">
-        <Avatar
-          alt="React Icon"
-          src={logo}
-          className="logo"
-        />
-        <Typography variant="title" color="inherit" className={classes.flex}>
-          <NavLink to="/articles">Articles</NavLink>
-        </Typography>
-        <Typography variant="title" color="inherit">
-          <NavLink to="/login">Login</NavLink>
-        </Typography>
+          <Avatar
+            alt="React Icon"
+            src={logo}
+            className="logo"
+          />
+          <Typography variant="title" color="inherit" className={classes.flex}>
+            <NavLink to="/authors">Authors</NavLink>
+          </Typography>
+          <Typography variant="title" color="inherit">
+            <NavLink to="/login">Login</NavLink>
+          </Typography>
         </Toolbar>
       </AppBar>
     </div>
