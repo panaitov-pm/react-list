@@ -1,0 +1,5 @@
+export default {
+  SAVE_USER_INFO: 'SAVE_USER_INFO',
+  START_LOAD: 'START_LOAD',
+  FINISH_LOAD: 'FINISH_LOAD',
+};
