@@ -16,6 +16,7 @@ import Paper from '@material-ui/core/Paper';
 import Fade from '@material-ui/core/Fade';
 import Slide from '@material-ui/core/Slide';
 import Spinner from 'react-spinkit';
+import ErrorBoundary from '../../../ErrorBoundary.jsx';
 
 import Author from './Author';
 import ToolbarTitleSelectedCount from './ToolbarTitleSelectedCount';
@@ -106,7 +107,7 @@ class Authors extends Component {
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
-    const { classes, getUsers, data, isLoading, isLoaded } = this.props;
+    const { classes, getUsers, error, data, isLoading, isLoaded } = this.props;
     const { visible, selected } = this.state;
     const numSelected = selected.length;
     const rowCount = data.length;
@@ -136,16 +137,16 @@ class Authors extends Component {
             <TableBody>
               {
                 data.map((user) => {
-                    const isSelected = this.isSelected(user.id);
-                    return <Author key={user.id} user={user}
-                                   isSelected={isSelected}
-                                   onSelect={this.handleSelect}
-                    />;
-                  },
-                )
+                  const isSelected = this.isSelected(user.id);
+                  return <Author key={user.id} user={user}
+                                 isSelected={isSelected}
+                                 onSelect={this.handleSelect}
+                  />;
+                })
               }
             </TableBody>
           </Table>
+          {(error) && <ErrorBoundary title="Articles were not found" />}
         </Paper>
         <div className="articles__action">
           {
@@ -173,13 +174,14 @@ class Authors extends Component {
       </div>
     );
   }
-};
+}
 
 Authors.propTypes = {
   classes: PropTypes.object.isRequired,
-  data: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object.isRequired),
   isLoading: PropTypes.bool.isRequired,
   isLoaded: PropTypes.bool.isRequired,
+  error: PropTypes.bool.isRequired,
   getUsers: PropTypes.func.isRequired,
 };
 
@@ -195,6 +197,7 @@ export default connect(
     data: users.data,
     isLoading: users.isLoading,
     isLoaded: users.isLoaded,
+    error: users.error,
   }),
   { getUsers },
 )(withStyles(styles)(Authors));
