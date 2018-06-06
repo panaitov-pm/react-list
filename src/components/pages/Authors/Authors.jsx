@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { generate as id } from 'shortid';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -10,6 +11,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Tooltip from '@material-ui/core/Tooltip';
 import Checkbox from '@material-ui/core/Checkbox';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import Paper from '@material-ui/core/Paper';
@@ -54,11 +57,21 @@ const styles = theme => ({
         backgroundColor: theme.palette.secondary.dark,
       },
 });
+const columnHeaderData = [
+  { id: id(), name: 'name', label: 'Name' },
+  { id: id(), name: 'username', label: 'UserName' },
+  { id: id(), name: '', label: 'Email' },
+  { id: id(), name: '', label: 'Phone' },
+  { id: id(), name: '', label: 'Website' },
+  { id: id(), name: '', label: 'Company' },
+];
 
 class Authors extends Component {
   state = {
     visible: false,
     selected: [],
+    order: 'asc',
+    orderBy: 'name',
   };
 
   componentDidMount() {
@@ -82,6 +95,21 @@ class Authors extends Component {
     }
     this.setState({ selected: [] });
   };
+
+  handleCreateSort = (event, property) => {
+
+      return (a, b) => {
+        if (event === 'asc') {
+          return a[property].toLowerCase().localeCompare(b[property].toLowerCase());
+      } else {
+          return b[property].toLowerCase().localeCompare(a[property].toLowerCase());
+        }
+      }
+  };
+  handleSort = (name) => this.setState(({ order }) => ({
+    order: (order === 'asc') ? 'desc' : 'asc',
+    orderBy: name,
+  }));
 
   handleSelect = (id) => {
     const { selected } = this.state;
@@ -108,10 +136,9 @@ class Authors extends Component {
 
   render() {
     const { classes, getUsers, error, data, isLoading, isLoaded } = this.props;
-    const { visible, selected } = this.state;
+    const { visible, selected, order, orderBy } = this.state;
     const numSelected = selected.length;
     const rowCount = data.length;
-
     return (
       <div className="container">
         <Paper className={classes.root}>
@@ -126,17 +153,37 @@ class Authors extends Component {
                     onChange={this.handleSelectAll}
                   />
                 </TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>UserName</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Website</TableCell>
-                <TableCell>Company</TableCell>
+                {
+                  columnHeaderData.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      sortDirection={orderBy === column.name ? order : false}
+                      onClick={() => this.handleSort(column.name)}
+                    >
+                      {
+                        (column.name)
+                          ? <Tooltip
+                            title="Sort"
+                            placement="top-start"
+                            enterDelay={300}
+                          >
+                            <TableSortLabel
+                              active={orderBy === column.name}
+                              direction={order}
+                            >
+                              {column.label}
+                            </TableSortLabel>
+                          </Tooltip>
+                          : column.label
+                      }
+                    </TableCell>
+                  ))
+                }
               </TableRow>
             </TableHead>
             <TableBody>
               {
-                data.map((user) => {
+                data.sort(this.handleCreateSort(order, orderBy)).map((user) => {
                   const isSelected = this.isSelected(user.id);
                   return <Author key={user.id} user={user}
                                  isSelected={isSelected}
